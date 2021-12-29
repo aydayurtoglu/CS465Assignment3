@@ -42,25 +42,16 @@ window.onload = function init() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Parametric equation for decorative knot
-    let ustep = 0.1;
-    let vstep = 0.1;
-    let phistep = 0.1;
+    let ustep = 0.02;
+    let vstep = 0.02;
     for (let v = 0; v <= 1; v += vstep) {
         for (let u = -2 * Math.PI; u <= 2 * Math.PI; u += ustep) {
-            for (let phi = 0; phi <= 2 * Math.PI; phi += phistep) {
-                let x = Math.cos(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
-                let y = Math.sin(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
-                let z = 0.35*Math.sin(5*u);
+            let x = Math.cos(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
+            let y = Math.sin(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
+            let z = 0.35*Math.sin(5*u);
 
-                let a = (4 * x + Math.cos(phi) * x);
-                let b = (4 * y + Math.cos(phi) * y);
-                let c = (Math.sin(phi) + z);
-                positions = positions.concat([a,b,c]);
-                
-
-            // positions = positions.concat([x,y,z]);
-                colors = colors.concat([x + 0.5, y + 0.5, z + 0.5])
-            }
+            positions = positions.concat([x,y,z]);
+            colors = colors.concat([x + 0.5, y + 0.5, z + 0.5])
         }
     }
 
