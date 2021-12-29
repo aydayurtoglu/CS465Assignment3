@@ -27,20 +27,9 @@ window.onload = function init() {
     gl.viewport(0, 0, c.width, c.height);
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
-    
-    //initShaders();
-    //initBuffers();
 
 
-    // Prepare torus coordinate data
-     
-    // x = (R + r cos(v)) cos(u)
-    // y = (R + r cos(v)) sin(u)
-    // z = r sin(v)
-    // 
-    // u is an element of the set of numbers [0, 2 pi]
-    // v is an element of the set of numbers [0, 2 pi]
-    
+    // Parametric equation for decorative knot
     let ustep = 0.01;
     let vstep = 0.01;
     for (let v = 0; v <= 1; v += vstep) {
@@ -58,23 +47,6 @@ window.onload = function init() {
     //
     var program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
-/*
-    var cBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, 16 * maxNumVertices, gl.STATIC_DRAW);
-
-    var vColor = gl.getAttribLocation(program, "vColor");
-    gl.vertexAttribPointer(vColor, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vColor);
-
-    var vBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, 8 * maxNumVertices, gl.STATIC_DRAW);
-
-    var vPosition = gl.getAttribLocation(program, "vPosition");
-    gl.vertexAttribPointer(vPosition, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(vPosition);
-*/
 
     aLoc[0] = gl.getAttribLocation(program, "position");
     aLoc[1] = gl.getAttribLocation(program, "color");
@@ -96,16 +68,19 @@ function render(timestamp) {
     //rad += Math.PI * 1.0 / 180.0;
     rad = timestamp / 1000; // Seconds since the first requestAnimationFrame (ms)
 
+    // we'll handle matrices here
+
   /*  mat4.perspective(pMatrix, 45, window.innerWidth / window.innerHeight, 0.1, 100.0);
     mat4.identity(mvMatrix);
     let translation = vec3(0.0,0.0,0.0);
     vec3.set(translation, 0.0, 0.0, -2.0);
     mat4.translate(mvMatrix, mvMatrix, translation);
     mat4.rotate(mvMatrix, mvMatrix, rad, [1, 1, 1]);
-*/
 
-  //  gl.uniformMatrix4fv(uLoc[0], false, pMatrix);
-  //  gl.uniformMatrix4fv(uLoc[1], false, mvMatrix);
+    gl.uniformMatrix4fv(uLoc[0], false, pMatrix);
+    gl.uniformMatrix4fv(uLoc[1], false, mvMatrix);
+
+  */
     
     gl.drawArrays(gl.LINE_STRIP, 0, positions.length / 3);
     gl.flush();
