@@ -1,33 +1,50 @@
-let c, gl;
+let canvas, gl;
 let aLoc = [];
 let uLoc = [];
-
+let program; 
 let positions = [];
 let colors = [];
 
 let translation;
-let eye;
-let center;
-let up;
 let view;
 let mvMatrix = mat4();
 let pMatrix = mat4();
 
 let rad = 0;
 
+var projectionMatrix = mat4();
+var projectionMatrixLoc;
+var modelViewMatrix = mat4();
+var modelViewMatrixLoc;
+
+var near = -1;
+var far = 1;
+var radius = 1.0;
+var theta  = 0.0;
+var phi    = 0.0;
+var dr = 5.0 * Math.PI/180.0;
+
+var left = -1.0;
+var right = 1.0;
+var ytop = 1.0;
+var bottom = -1.0;
+
+var eye = vec3(1.0,1.0,1.0);
+var at = vec3(0.0,0.0,0.0);
+var up = vec3(0.0,1.0,0.0);
+
 window.onload = function init() {
-    c = document.getElementById("gl-canvas");
-    gl = c.getContext("experimental-webgl");
+    canvas = document.getElementById("gl-canvas");
+    gl = canvas.getContext("experimental-webgl");
 
     if (!gl) {
         alert("WebGL isn't available");
     }
 
     gl.enable(gl.DEPTH_TEST);
-    gl.viewport(0, 0, c.width, c.height);
+    gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0.0, 0.0, 0.0, 0.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
-
 
     // Parametric equation for decorative knot
     let ustep = 0.01;
@@ -45,7 +62,7 @@ window.onload = function init() {
     //
     //  Load shaders and initialize attribute buffers
     //
-    var program = initShaders(gl, "vertex-shader", "fragment-shader");
+    program = initShaders(gl, "vertex-shader", "fragment-shader");
     gl.useProgram(program);
 
     aLoc[0] = gl.getAttribLocation(program, "position");
@@ -61,29 +78,28 @@ window.onload = function init() {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
     gl.vertexAttribPointer(aLoc[1], 3, gl.FLOAT, false, 0, 0);
 
+    document.getElementById("Button1").onclick = function(){eye[0] *= 1.2};
+    document.getElementById("Button2").onclick = function(){eye[0] *= 0.8};
+    document.getElementById("Button3").onclick = function(){eye[1] *= 1.2};
+    document.getElementById("Button4").onclick = function(){eye[1] *= 0.8};
+    document.getElementById("Button5").onclick = function(){eye[2] *= 1.2};
+    document.getElementById("Button6").onclick = function(){eye[2] *= 0.8};
+
     render();
 };
 
-function render(timestamp) {
-    //rad += Math.PI * 1.0 / 180.0;
-    rad = timestamp / 1000; // Seconds since the first requestAnimationFrame (ms)
+function render() {
+    projectionMatrix = ortho(-2.0, 2.0, -2.0, 2.0, -10.0, 10.0);
+    modelViewMatrix = lookAt(eye, at , up); 
 
-    // we'll handle matrices here
+    gl.uniformMatrix4fv( gl.getUniformLocation( program, "projectionMatrix"), false, flatten(projectionMatrix) );
+    projectionMatrixLoc = gl.getUniformLocation( program, "projectionMatrix");
 
-  /*  mat4.perspective(pMatrix, 45, window.innerWidth / window.innerHeight, 0.1, 100.0);
-    mat4.identity(mvMatrix);
-    let translation = vec3(0.0,0.0,0.0);
-    vec3.set(translation, 0.0, 0.0, -2.0);
-    mat4.translate(mvMatrix, mvMatrix, translation);
-    mat4.rotate(mvMatrix, mvMatrix, rad, [1, 1, 1]);
-
-    gl.uniformMatrix4fv(uLoc[0], false, pMatrix);
-    gl.uniformMatrix4fv(uLoc[1], false, mvMatrix);
-
-  */
+    gl.uniformMatrix4fv( gl.getUniformLocation( program, "modelViewMatrix"), false, flatten(modelViewMatrix) );
+    modelViewMatrixLoc = gl.getUniformLocation( program, "modelViewMatrix");
     
     gl.drawArrays(gl.LINE_STRIP, 0, positions.length / 3);
-    gl.flush();
-
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    
     requestAnimationFrame(render);
 }

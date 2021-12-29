@@ -10,13 +10,14 @@
 attribute vec3 position;
 attribute vec3 color;
 varying   vec4 vColor;
-uniform mat4 pjMatrix;
-uniform mat4 mvMatrix;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
 
 void main()
 {
     vColor = vec4(color, 1.0);
-    gl_Position = vec4(position, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
     gl_PointSize = 2.0;
 }
 </script>
@@ -32,6 +33,14 @@ void main()
 </script>
 
 <canvas id="gl-canvas" width="512" height="512"></canvas>
+<p> </p>
+    <button id = "Button1">Increase eye[0]</button>
+    <button id = "Button2">Decrease eye[0]</button>
+    <button id = "Button3">Increase eye[1]</button>
+    <button id = "Button4">Decrease eye[1]</button>
+    <button id = "Button5">Increase eye[2]</button>
+    <button id = "Button6">Decrease eye[2]</button>
+<p> </p>
 
 <script type="text/javascript" src="Common/webgl-utils.js"></script>
 <script type="text/javascript" src="Common/initShaders.js"></script>
