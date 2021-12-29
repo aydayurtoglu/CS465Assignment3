@@ -63,10 +63,20 @@ function initBuffers() {
     // u is an element of the set of numbers [0, 2 pi]
     // v is an element of the set of numbers [0, 2 pi]
     
-    let ustep = Math.PI * 5 / 180;
-    let vstep = Math.PI * 5 / 180;
+    let ustep = 0.01;
+    let vstep = 0.01;
     let R = 0.5;
     let r = 0.2;
+    for (let v = 0; v <= 1; v += vstep) {
+        for (let u = 0; u <= 2 * Math.PI; u += ustep) {
+            let x = Math.cos(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
+            let y = Math.sin(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
+            let z = 0.35*Math.sin(5*u);
+            positions = positions.concat([x, y, z]);
+            colors = colors.concat([x + 0.5, y + 0.5, z + 0.5])
+        }
+    }
+    /*
     for (let v = 0; v <= 2 * Math.PI; v += vstep) {
         for (let u = 0; u <= 2 * Math.PI; u += ustep) {
             let x = (R + r * Math.cos(v)) * Math.cos(u);
@@ -75,7 +85,7 @@ function initBuffers() {
             positions = positions.concat([x, y, z]);
             colors = colors.concat([x + 0.5, y + 0.5, z + 0.5])
         }
-    }
+    }*/
     
     gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
