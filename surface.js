@@ -97,8 +97,8 @@ function render(timestamp) {
     mat4.translate(mvMatrix, mvMatrix, translation);
     mat4.rotate(mvMatrix, mvMatrix, rad, [1, 1, 1]);
 */
-    gl.uniformMatrix4fv(uLoc[0], false, pMatrix);
-    gl.uniformMatrix4fv(uLoc[1], false, mvMatrix);
+  //  gl.uniformMatrix4fv(uLoc[0], false, pMatrix);
+  //  gl.uniformMatrix4fv(uLoc[1], false, mvMatrix);
     
     draw();
 
