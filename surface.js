@@ -17,19 +17,14 @@ var projectionMatrixLoc;
 var modelViewMatrix = mat4();
 var modelViewMatrixLoc;
 
-var near = -1;
-var far = 1;
-var radius = 1.0;
-var theta  = 0.0;
-var phi    = 0.0;
-var dr = 5.0 * Math.PI/180.0;
+var parameter = 2;
 
 var left = -1.0;
 var right = 1.0;
 var ytop = 1.0;
 var bottom = -1.0;
 
-var eye = vec3(1.0,1.0,1.0);
+var eye = vec3(0.1,0.1,0.9);
 var at = vec3(0.0,0.0,0.0);
 var up = vec3(0.0,1.0,0.0);
 
@@ -47,15 +42,25 @@ window.onload = function init() {
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Parametric equation for decorative knot
-    let ustep = 0.01;
-    let vstep = 0.01;
+    let ustep = 0.1;
+    let vstep = 0.1;
+    let phistep = 0.1;
     for (let v = 0; v <= 1; v += vstep) {
-        for (let u = 0; u <= 2 * Math.PI; u += ustep) {
-            let x = Math.cos(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
-            let y = Math.sin(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
-            let z = 0.35*Math.sin(5*u);
-            positions = positions.concat([x, y, z]);
-            colors = colors.concat([x + 0.5, y + 0.5, z + 0.5])
+        for (let u = -2 * Math.PI; u <= 2 * Math.PI; u += ustep) {
+            for (let phi = 0; phi <= 2 * Math.PI; phi += phistep) {
+                let x = Math.cos(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
+                let y = Math.sin(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
+                let z = 0.35*Math.sin(5*u);
+
+                let a = (4 * x + Math.cos(phi) * x);
+                let b = (4 * y + Math.cos(phi) * y);
+                let c = (Math.sin(phi) + z);
+                positions = positions.concat([a,b,c]);
+                
+
+            // positions = positions.concat([x,y,z]);
+                colors = colors.concat([x + 0.5, y + 0.5, z + 0.5])
+            }
         }
     }
 
@@ -85,11 +90,14 @@ window.onload = function init() {
     document.getElementById("Button5").onclick = function(){eye[2] *= 1.2};
     document.getElementById("Button6").onclick = function(){eye[2] *= 0.8};
 
+    document.getElementById("Button7").onclick = function(){parameter -= 0.1};
+    document.getElementById("Button8").onclick = function(){parameter += 0.1};
+
     render();
 };
 
 function render() {
-    projectionMatrix = ortho(-2.0, 2.0, -2.0, 2.0, -10.0, 10.0);
+    projectionMatrix = ortho(-parameter, parameter, -parameter, parameter, -10.0, 10.0);
     modelViewMatrix = lookAt(eye, at , up); 
 
     gl.uniformMatrix4fv( gl.getUniformLocation( program, "projectionMatrix"), false, flatten(projectionMatrix) );
