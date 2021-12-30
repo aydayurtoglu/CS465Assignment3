@@ -28,6 +28,9 @@ var eye = vec3(0.1,0.1,0.9);
 var at = vec3(0.0,0.0,0.0);
 var up = vec3(0.0,1.0,0.0);
 
+var r1 = 0.6;
+var r2 = 0.75;
+
 window.onload = function init() {
     canvas = document.getElementById("gl-canvas");
     gl = canvas.getContext("experimental-webgl");
@@ -44,11 +47,17 @@ window.onload = function init() {
     // Parametric equation for decorative knot
     let ustep = 0.02;
     let vstep = 0.02;
-    for (let v = 0; v <= 1; v += vstep) {
-        for (let u = -2 * Math.PI; u <= 2 * Math.PI; u += ustep) {
-            let x = Math.cos(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
-            let y = Math.sin(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
-            let z = 0.35*Math.sin(5*u);
+    for (let v = 0; v <= 2 * Math.PI; v += vstep) {
+        for (let u = 0; u <= 2 * Math.PI; u += ustep) {
+            // let x = Math.cos(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
+            // let y = Math.sin(2*u)*(1+0.6*(Math.cos(5*u)+0.75*Math.cos(10*u)));
+            // let z = 0.35*Math.sin(5*u);
+            
+            // The following equations referenced from Assignment page of CS 465
+            // For further information, please refer to: http://sinan.sonlu.bilkent.edu.tr/cs465/assignment3/
+            let x = 4*Math.cos(2*u)*(1+r1*(Math.cos(5*u)+r2*Math.cos(10*u)))+Math.cos(v)*Math.cos(2*u)*(1+r1*(Math.cos(5*u)+r2*Math.cos(10*u)))
+            let y = 4*Math.sin(2*u)*(1+r1*(Math.cos(5*u)+r2*Math.cos(10*u)))+Math.cos(v)*Math.sin(2*u)*(1+r1*(Math.cos(5*u)+r2*Math.cos(10*u)))
+            let z = Math.sin(v)+2*Math.sin(5*u)
 
             positions = positions.concat([x,y,z]);
             colors = colors.concat([x + 0.5, y + 0.5, z + 0.5])
@@ -83,6 +92,11 @@ window.onload = function init() {
 
     document.getElementById("Button7").onclick = function(){parameter -= 0.1};
     document.getElementById("Button8").onclick = function(){parameter += 0.1};
+
+    document.getElementById("Button9").onclick = function(){r1 += 0.1};
+    document.getElementById("Button10").onclick = function(){r1 -= 0.1};
+    document.getElementById("Button11").onclick = function(){r2 += 0.1};
+    document.getElementById("Button12").onclick = function(){r2 -= 0.1};
 
     render();
 };

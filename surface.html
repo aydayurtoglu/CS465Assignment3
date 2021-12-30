@@ -2,7 +2,8 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Torus Using WebGL</title>
+  <title>Torus Knot Using WebGL</title>
+  <link rel="stylesheet" href="surface.css">
 </head>
 <body>
 
@@ -32,20 +33,24 @@ void main()
 }
 </script>
 
-<canvas id="gl-canvas" width="512" height="512"></canvas>
-<div>
-  <button id = "Button1">Increase eye[0]</button>
-  <button id = "Button2">Decrease eye[0]</button>
-  <button id = "Button3">Increase eye[1]</button>
-  <button id = "Button4">Decrease eye[1]</button>
-  <button id = "Button5">Increase eye[2]</button>
-  <button id = "Button6">Decrease eye[2]</button>
+<canvas id="gl-canvas" width="1024" height="1024" style="float: right;"></canvas>
+<div class="card-body">
+  <div class="mybuttons">
+    <button id = "Button1">Increase eye[0] <br></button>
+    <button id = "Button2">Decrease eye[0] <br></button>
+    <button id = "Button3">Increase eye[1] <br></button>
+    <button id = "Button4">Decrease eye[1] <br></button>
+    <button id = "Button5">Increase eye[2] <br></button>
+    <button id = "Button6">Decrease eye[2] <br></button>
+    <button id = "Button7">Zoom in <br></button>
+    <button id = "Button8">Zoom out <br></button>
+    <button id = "Button9">Increase r1 <br></button>
+    <button id = "Button10">Decrease r1 <br></button>
+    <button id = "Button11">Increase r2 <br></button>
+    <button id = "Button12">Decrease r1 <br></button>
+  </div>
 </div>
-<div>
-  <button id = "Button7">Zoom in</button>
-  <button id = "Button8">Zoom out</button>
-</div>
-
+  
 <script type="text/javascript" src="Common/webgl-utils.js"></script>
 <script type="text/javascript" src="Common/initShaders.js"></script>
 <script type="text/javascript" src="Common/MV.js"></script>
